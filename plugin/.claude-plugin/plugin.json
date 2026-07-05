@@ -1,0 +1,8 @@
+{
+  "name": "careerpilot",
+  "description": "Claude Code skills and Playwright MCP wiring for CareerPilot job applications.",
+  "version": "2.0.0",
+  "author": {
+    "name": "CareerPilot"
+  }
+}

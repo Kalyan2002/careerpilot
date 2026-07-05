@@ -1,0 +1,14 @@
+model QueueEntry {
+  id         Int       @id @default(autoincrement())
+  profileId  Int
+  profile    Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  url        String
+  note       String?
+  status     String    @default("pending")
+  createdAt  DateTime  @default(now())
+  consumedAt DateTime?
+
+  @@unique([profileId, url])
+  @@index([profileId, status])
+  @@index([status])
+}

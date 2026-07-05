@@ -1,0 +1,25 @@
+# Risk-based PR labels, adapted from career-ops's labeler config.
+
+"🔴 core-architecture":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/web/prisma/**"
+          - "src/web/src/server/**"
+          - "src/terminal-node/**"
+
+"⚠️ agent-behavior":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "plugin/**"
+
+"🖥 web-ui":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/web/src/components/**"
+          - "src/web/src/app/(main)/**"
+
+"📄 docs":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/*.md"
+          - "docs/**"

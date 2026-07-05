@@ -1,0 +1,15 @@
+model CoverLetter {
+  id        Int      @id @default(autoincrement())
+  profileId Int
+  profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  jobUrl   String?
+  jobTitle String?
+  company  String?
+  source   String   @default("manual") // apply | auto-apply | manual
+  content  String                       // the full plain-text letter
+
+  createdAt DateTime @default(now())
+
+  @@index([profileId, createdAt])
+}

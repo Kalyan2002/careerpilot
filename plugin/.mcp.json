@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "@playwright/mcp@0.0.76",
+        "--snapshot-mode",
+        "none",
+        "--user-data-dir",
+        ".playwright-mcp"
+      ]
+    }
+  }
+}

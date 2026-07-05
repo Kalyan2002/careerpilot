@@ -1,0 +1,77 @@
+model Profile {
+  id        Int    @id @default(autoincrement())
+  isActive  Boolean @default(false)
+  firstName String
+  lastName  String
+  email     String
+  phone     String?
+  website   String?
+  linkedin  String?
+  github    String?
+
+  street  String?
+  aptUnit String?
+  city    String?
+  state   String?
+  zipCode String?
+  country String?
+
+  usAuthorized        Boolean @default(false)
+  requiresSponsorship Boolean @default(false)
+  visaStatus          String?
+  optExtension        String?
+  willingToRelocate   Boolean @default(false)
+  preferredLocations  String  @default("[]")
+
+  eeoGender           String?
+  eeoRace             String?
+  eeoEthnicity        String?
+  eeoHispanicOrLatino String?
+  eeoVeteranStatus    String?
+  eeoDisabilityStatus String?
+
+  primaryResumeId Int?     @unique
+  primaryResume   Resume?  @relation("PrimaryResume", fields: [primaryResumeId], references: [id], onDelete: SetNull)
+  resumes         Resume[]
+
+  autoApply     AutoApplySettings?
+  applications  Application[]
+  campaigns     Campaign[]
+  credentials   Credential[]
+  jobBoards     JobBoard[]
+  queueEntries  QueueEntry[]
+  emailAccount  EmailAccount?
+  upworkProposals UpworkProposal[]
+  upworkProfile UpworkProfile?
+  references    Reference[]
+  contacts        Contact[]
+  outreachMessages OutreachMessage[]
+  coverLetters    CoverLetter[]
+
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive])
+}
+
+model Reference {
+  id           Int     @id @default(autoincrement())
+  profileId    Int
+  profile      Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  name         String
+  relationship String?
+  company      String?
+  email        String?
+  phone        String?
+  position     Int     @default(0)
+
+  @@index([profileId])
+}
+
+model AutoApplySettings {
+  id                    Int     @id @default(autoincrement())
+  profileId             Int     @unique
+  profile               Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  minMatchScore              Int     @default(70)
+  maxApplicationsPerCampaign Int?
+  defaultStartDate      String  @default("2 weeks notice")
+}

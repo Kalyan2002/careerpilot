@@ -1,0 +1,47 @@
+model Resume {
+  id        Int     @id @default(autoincrement())
+  profileId Int
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  label String
+
+  sourceFilename  String?
+  sourceMimeType  String?
+  sourceSizeBytes Int?
+
+  content String?
+  version Int     @default(1)
+
+  variants   ResumeVariant[]
+  primaryFor Profile?        @relation("PrimaryResume")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([profileId])
+}
+
+model ResumeVariant {
+  id       Int    @id @default(autoincrement())
+  resumeId Int
+  resume   Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+
+  label         String
+  jobUrl        String?
+  applicationId Int?
+  application   Application? @relation(fields: [applicationId], references: [id], onDelete: SetNull)
+
+  content   String
+  diffNotes String?
+
+  // JSON audit of model-authored bullet rewrites applied to this variant:
+  // { experience: [{ entryIndex, company, bullets: [{ original, tailored, flags[] }] }] }.
+  // Null when the variant used selection/reordering only (no rewording).
+  rewrites String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([resumeId])
+  @@index([applicationId])
+}

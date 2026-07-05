@@ -1,0 +1,25 @@
+model Job {
+  id          Int       @id @default(autoincrement())
+  campaignId  String
+  campaign    Campaign  @relation(fields: [campaignId], references: [campaignId], onDelete: Cascade)
+  key         String
+  title       String
+  company     String
+  location    String?
+  salary      String?
+  type        String?
+  url         String
+  board       String?
+  matchScore  Int?
+  matchReason String?
+  status      String    @default("pending")
+  appliedAt   DateTime?
+  failReason  String?
+  retryNotes  String?
+  skipReason  String?
+  description String?
+  digest      String?
+
+  @@unique([campaignId, key])
+  @@index([campaignId, status])
+}

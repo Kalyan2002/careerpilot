@@ -1,0 +1,31 @@
+model Campaign {
+  campaignId  String    @id
+  profileId   Int
+  profile     Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  query       String
+  source      String
+  status      String    @default("in_progress")
+  startedAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  completedAt DateTime?
+  config      String
+  summary     String    @default("{}")
+
+  jobs             Job[]
+  events           CampaignEvent[]
+  applications     Application[]
+  outreachMessages OutreachMessage[]
+
+  @@index([profileId])
+}
+
+model CampaignEvent {
+  id         Int      @id @default(autoincrement())
+  campaignId String
+  campaign   Campaign @relation(fields: [campaignId], references: [campaignId], onDelete: Cascade)
+  type       String
+  payload    String
+  createdAt  DateTime @default(now())
+
+  @@index([campaignId, createdAt])
+}

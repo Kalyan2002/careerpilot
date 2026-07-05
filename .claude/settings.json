@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl:*)",
+      "Bash(jq:*)",
+      "Bash(date:*)",
+      "mcp__plugin_careerpilot_playwright__*",
+      "Skill(humanizer)",
+      "Skill(cover-letter)",
+      "Skill(upwork-proposal)",
+      "Skill(autopilot)",
+      "Skill(apply)",
+      "Skill(search)",
+      "Skill(interview)"
+    ]
+  }
+}

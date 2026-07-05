@@ -1,0 +1,21 @@
+{
+  "name": "careerpilot",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "src/web",
+    "src/terminal-node"
+  ],
+  "scripts": {
+    "dev": "concurrently -k -n terminal,web -c cyan,green \"bun --cwd=src/terminal-node run dev\" \"bun --cwd=src/web run dev\"",
+    "db:setup": "bun --cwd=src/web run db:generate && bun --cwd=src/web run db:migrate:apply && bun --cwd=src/web run db:seed",
+    "build:web": "bun --cwd=src/web run build",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
+    "@playwright/mcp": "0.0.76",
+    "concurrently": "^9.1.0",
+    "prettier": "^3.8.3"
+  }
+}

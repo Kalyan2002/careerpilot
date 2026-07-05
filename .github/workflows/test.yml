@@ -1,0 +1,34 @@
+name: Tests
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Generate Prisma client
+        run: bun --cwd=src/web run db:generate
+
+      - name: Typecheck web
+        run: bun --cwd=src/web run typecheck
+
+      - name: Typecheck terminal host
+        run: bun --cwd=src/terminal-node run typecheck
+
+      - name: Lint web
+        run: bun --cwd=src/web run lint
+
+      - name: Test web
+        run: cd src/web && bun test

@@ -1,0 +1,14 @@
+model JobBoard {
+  id        Int     @id @default(autoincrement())
+  profileId Int
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  name      String
+  domain    String
+  searchUrl String?
+  email     String?
+  password  String?
+  sortOrder Int     @default(0)
+
+  @@unique([profileId, domain])
+  @@index([profileId])
+}
