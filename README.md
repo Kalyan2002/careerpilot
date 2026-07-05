@@ -27,16 +27,52 @@ runs the CareerPilot provider skills against real job boards via Playwright.
     (`source.path: ./plugin`) when launched at the repo root
     (`codex --no-alt-screen -C .`). Enable it once from Codex's `/plugin` menu.
 
-## Quick Start
+## Getting Started
+
+### Prerequisites
+
+- **[Bun](https://bun.sh) 1.3+** — runs the web app, the terminal host, Prisma, and seed scripts.
+- **[Claude Code](https://claude.com/product/claude-code)** and/or **[Codex CLI](https://github.com/openai/codex)** on `PATH` — at least one is required; this is the agent that actually searches boards and fills forms via Playwright, driven from the embedded terminal.
+- **Windows, macOS, or Linux.** The terminal host uses [`node-pty`](https://github.com/microsoft/node-pty), which ships prebuilt binaries for all three — no C++ toolchain needed.
+
+### 1. Clone and install
 
 ```bash
-# from the project root (not yet published to a git remote)
+git clone https://github.com/Kalyan2002/careerpilot.git
+cd careerpilot
 bun install
-bun run db:setup # Creates the SQLite database, runs migrations, and seeds initial data
+```
+
+### 2. Generate the credential-encryption key
+
+Board passwords, API keys, and Gmail OAuth tokens are encrypted at rest (AES-256-GCM). Generate a key and drop it into `src/web/.env` (copy from `src/web/.env.example` first):
+
+```bash
+cp src/web/.env.example src/web/.env
+bun --cwd src/web run generate-key
+```
+
+Paste the printed value in as `CREDENTIAL_ENCRYPTION_KEY=...` in `src/web/.env`. This key is only in your local `.env` (gitignored) — losing it makes any already-stored secrets unrecoverable, so back it up somewhere safe if you plan to keep using this install.
+
+Gmail integration (recruiter-reply tracking, verification-code auto-fill) is optional — see [Email Integration](#email-integration-gmail) below if you want it; skip it otherwise, the rest of the app works without it.
+
+### 3. Set up the database
+
+```bash
+bun run db:setup   # generates the Prisma client, applies migrations, seeds default job boards
+```
+
+### 4. Run it
+
+```bash
 bun run dev   # web :8000 + terminal :8001
 ```
 
-Open `http://localhost:8000` and toggle the Terminal panel.
+Open `http://localhost:8000` — first visit redirects to a 5-step onboarding wizard (resume upload/parsing, personal details, address, work authorization, EEO, autopilot preferences). Once that's done, toggle the Terminal panel and either click a "Run search" / "Run autopilot" button, or type a skill command directly (see [Skills](#skills) below).
+
+### 5. Point it at real job boards
+
+Job boards (LinkedIn, Indeed, Greenhouse-backed company pages, etc.) are configured at `/boards` — enable the ones you want, and add per-board login credentials if a board needs an account. Everything runs locally against your own browser session; nothing is sent anywhere except the job boards you enable and (optionally) Google, if you connect Gmail.
 
 ## Skills
 

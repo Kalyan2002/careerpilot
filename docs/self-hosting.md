@@ -36,9 +36,11 @@ which points Codex at `./plugin`. Codex auto-discovers it when launched with
 ## One-Time Setup
 
 ```bash
-# from the project root (not yet published to a git remote)
+git clone https://github.com/Kalyan2002/careerpilot.git
+cd careerpilot
 bun install
-bun --cwd src/web install
+cp src/web/.env.example src/web/.env
+bun --cwd src/web run generate-key   # paste the output as CREDENTIAL_ENCRYPTION_KEY in src/web/.env
 bun --cwd src/web run db:migrate:apply   # creates src/web/prisma/app.db
 bun --cwd src/web run db:seed            # seeds default job boards
 ```
