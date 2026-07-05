@@ -10,6 +10,22 @@
 import { PROVIDERS, type TerminalProviderId } from "./paths";
 import { SessionManager, type TerminalClient } from "./session-manager";
 
+// node-pty's Windows write path can emit "Socket is closed" asynchronously
+// (an 'error' event on the underlying socket, not a synchronous throw) when a
+// write races against an already-exited PTY — see pty-provider.ts's `write()`.
+// A synchronous try/catch around that call cannot intercept an async event
+// emission, so this process-wide net is the only place left to catch it.
+// Everything else is a real bug: log and exit so it's visible rather than
+// silently limping along in a broken state.
+process.on("uncaughtException", (err: NodeJS.ErrnoException) => {
+  if (err?.code === "ERR_SOCKET_CLOSED") {
+    console.error("[terminal] ignored a write racing against an already-exited PTY:", err.message);
+    return;
+  }
+  console.error("[terminal] uncaught exception:", err);
+  process.exit(1);
+});
+
 const PORT = Number(process.env.PORT ?? 8001);
 const session = new SessionManager();
 

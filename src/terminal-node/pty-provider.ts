@@ -17,6 +17,7 @@ export class PtyStartError extends Error {
 
 export class PtyProcess {
   private readonly proc: pty.IPty;
+  private exited = false;
 
   constructor(
     command: string,
@@ -54,15 +55,25 @@ export class PtyProcess {
     }
 
     this.proc.onData((data) => onData(Buffer.from(data, "utf8")));
-    this.proc.onExit(({ exitCode }) => onExit(exitCode));
+    this.proc.onExit(({ exitCode }) => {
+      this.exited = true;
+      onExit(exitCode);
+    });
   }
 
   write(data: Buffer): void {
+    // Proactive guard: skip entirely once we know the process exited. This
+    // doesn't close every race (node-pty's underlying socket can emit its
+    // "closed" error asynchronously, after this check but before/during the
+    // write, in a way a synchronous try/catch here cannot intercept — see
+    // the process-wide 'uncaughtException' safety net in server.ts for that
+    // narrower window), but it eliminates the common case: a queued
+    // keystroke/injected command arriving after the exit event already fired.
+    if (this.exited) return;
     try {
       this.proc.write(data.toString("utf8"));
     } catch {
-      // ignore writes racing against an already-exited process (e.g. a
-      // buffered keystroke/injected command arriving just after the PTY died)
+      // ignore synchronous write failures against an already-exited process
     }
   }
 
