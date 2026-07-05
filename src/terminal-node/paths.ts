@@ -4,6 +4,9 @@
  */
 import { existsSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export type TerminalProviderId = "claude" | "codex";
 
@@ -66,7 +69,7 @@ function isCodexPluginDir(path: string): boolean {
 export function resolveSessionPaths(): TerminalSessionPaths {
   const candidates = new Set<string>();
   for (const root of ancestors(process.cwd())) candidates.add(root);
-  for (const root of ancestors(import.meta.dir)) candidates.add(root);
+  for (const root of ancestors(__dirname)) candidates.add(root);
 
   for (const root of candidates) {
     const pluginDir = join(root, "plugin");

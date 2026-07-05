@@ -8,8 +8,8 @@ import {
   resolveSessionPaths,
   resolveWorkingDir,
   type TerminalProviderId,
-} from "./paths";
-import { PtyProcess, PtyStartError } from "./pty-provider";
+} from "./paths.ts";
+import { PtyProcess, PtyStartError } from "./pty-provider.ts";
 
 const PLAYWRIGHT_SCRATCH_EXTENSIONS = new Set([
   ".log",
