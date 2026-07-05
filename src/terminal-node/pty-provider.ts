@@ -58,7 +58,12 @@ export class PtyProcess {
   }
 
   write(data: Buffer): void {
-    this.proc.write(data.toString("utf8"));
+    try {
+      this.proc.write(data.toString("utf8"));
+    } catch {
+      // ignore writes racing against an already-exited process (e.g. a
+      // buffered keystroke/injected command arriving just after the PTY died)
+    }
   }
 
   resize(cols: number, rows: number): void {
