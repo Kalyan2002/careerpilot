@@ -12,8 +12,10 @@ and **[career-ops](https://github.com/santifer/career-ops)** contributed its
 offer-scoring rubric, zero-token job-board scanners (Greenhouse/Lever/Ashby/
 Workday), posting-liveness and scam/ghost-job screening, and LaTeX CV export.
 On top of the merge: credentials and OAuth tokens are now encrypted at rest,
-the terminal host was rewritten in Bun (dropping a .NET dependency), and CI
-was added.
+the terminal host was rewritten in Node (dropping a .NET dependency — node-pty's
+Windows write path has a Bun compatibility bug, so this piece runs under
+plain Node while Bun still orchestrates/runs everything else), and CI was
+added.
 
 ## Components
 
@@ -22,7 +24,7 @@ was added.
   batch queue. It embeds an xterm.js terminal panel and exposes "Run
   autopilot" / "Run apply" buttons that inject slash commands.
 - **Terminal host** ([src/terminal-node/](src/terminal-node/)) -
-  `http://localhost:8001`. Bun/TypeScript process that owns one active
+  `http://localhost:8001`. Node/TypeScript process that owns one active
   provider PTY (node-pty in winpty mode) and bridges it to the web UI over
   WebSocket. The terminal drawer can switch between Claude Code and Codex.
 - **Plugin** ([plugin/](plugin/)) - one provider-neutral plugin loaded by both
@@ -42,7 +44,8 @@ was added.
 
 ### Prerequisites
 
-- **[Bun](https://bun.sh) 1.3+** — runs the web app, the terminal host, Prisma, and seed scripts.
+- **[Bun](https://bun.sh) 1.3+** — runs the web app, Prisma, and seed scripts.
+- **[Node.js](https://nodejs.org) 22.6+** — runs the terminal host specifically (node-pty's Windows write path has a Bun compatibility bug).
 - **[Claude Code](https://claude.com/product/claude-code)** and/or **[Codex CLI](https://github.com/openai/codex)** on `PATH` — at least one is required; this is the agent that actually searches boards and fills forms via Playwright, driven from the embedded terminal.
 - **Windows, macOS, or Linux.** The terminal host uses [`node-pty`](https://github.com/microsoft/node-pty), which ships prebuilt binaries for all three — no C++ toolchain needed.
 
@@ -189,7 +192,7 @@ scopes`** — a required Gmail scope (`gmail.readonly` or `gmail.send`) isn't
 | Forms              | TanStack Form 1 + Zod v4                       |
 | Server state       | TanStack Query 5                               |
 | Database           | SQLite via Prisma 7 + `@prisma/adapter-libsql` |
-| Terminal host      | Bun + node-pty (winpty mode)                   |
+| Terminal host      | Node + node-pty (winpty mode)                   |
 | Browser automation | Playwright via the Playwright MCP server       |
 
 ## License

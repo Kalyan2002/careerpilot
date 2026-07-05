@@ -1,6 +1,6 @@
 # CareerPilot
 
-Local AI job-application app (merge of jobpilot (upstream: suxrobgm/jobpilot) + career-ops). Uses Claude Code or Codex as the provider, a Next.js + SQLite web app at `http://localhost:8000` for state, and a Bun/node-pty PTY host at `:8001` for the embedded terminal.
+Local AI job-application app (merge of jobpilot (upstream: suxrobgm/jobpilot) + career-ops). Uses Claude Code or Codex as the provider, a Next.js + SQLite web app at `http://localhost:8000` for state, and a Node/node-pty PTY host at `:8001` for the embedded terminal.
 
 ## Layout
 
@@ -9,7 +9,7 @@ Local AI job-application app (merge of jobpilot (upstream: suxrobgm/jobpilot) + 
   - `plugin/.mcp.json` — Playwright MCP wiring, shared by both providers.
   - `plugin/skills/<name>/SKILL.md` — one hand-authored, provider-neutral skill per directory; `plugin/skills/shared/*.md` — shared docs. **Edit here directly.**
 - `src/web/` — Bun + Next.js 16 + MUI 9 + Prisma 7 + TanStack Query/Form + Zod v4. Owns all persistence (SQLite at `prisma/app.db`, resumes at `storage/resumes/`).
-- `src/terminal-node/` — Bun/TypeScript service hosting one provider PTY via node-pty (winpty mode, matching the frontend's `windowsPty: {backend: "winpty"}` xterm.js setting). Exposes `/ws`, `/sessions/start`, `/sessions/inject`, `/sessions/current`, `/healthz` — same contract as the original .NET bridge it replaced.
+- `src/terminal-node/` — Node/TypeScript service (run directly via `node server.ts`; node-pty's Windows write path has a Bun compatibility bug) hosting one provider PTY via node-pty (winpty mode, matching the frontend's `windowsPty: {backend: "winpty"}` xterm.js setting). Exposes `/ws`, `/sessions/start`, `/sessions/inject`, `/sessions/current`, `/healthz` — same contract as the original .NET bridge it replaced.
 
 ## Commands
 

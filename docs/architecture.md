@@ -11,7 +11,7 @@ autopilot campaigns with per-job status, and the batch URL queue. Prisma schema 
 split per domain under `src/web/prisma/schema/`.
 
 **Terminal host** ([src/terminal-node/](../src/terminal-node/)) is
-a Bun/TypeScript service on `127.0.0.1:8001`. It owns one active provider
+a Node/TypeScript service on `127.0.0.1:8001`. It owns one active provider
 PTY (node-pty in winpty mode) and bridges it to the web UI's xterm.js panel
 over WebSocket. HTTP endpoints (`POST /sessions/start`, `POST /sessions/inject`,
 `DELETE /sessions/current`, `GET /healthz`, `GET /ws`) let UI buttons write
