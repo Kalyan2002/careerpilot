@@ -1,6 +1,11 @@
 MIT License
 
+CareerPilot is a merge of two MIT-licensed projects:
+- jobpilot (https://github.com/suxrobgm/jobpilot) — Copyright (c) 2026 Sukhrob Ilyosbekov
+- career-ops (https://github.com/santifer/career-ops) — Copyright (c) 2026 Santiago Fernández de Valderrama
+
 Copyright (c) 2026 Sukhrob Ilyosbekov
+Copyright (c) 2026 Santiago Fernández de Valderrama
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

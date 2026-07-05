@@ -4,6 +4,17 @@ A local-first AI job-application app. A Next.js + SQLite web UI owns all
 state and embeds an interactive Claude Code or Codex terminal session that
 runs the CareerPilot provider skills against real job boards via Playwright.
 
+CareerPilot is a merge of two open-source projects, combining what each did
+best: **[jobpilot](https://github.com/suxrobgm/jobpilot)** contributed the
+web app itself — the Prisma/SQLite data model, the real Gmail integration,
+and the Playwright-MCP-driven apply/autopilot pipeline with a working UI —
+and **[career-ops](https://github.com/santifer/career-ops)** contributed its
+offer-scoring rubric, zero-token job-board scanners (Greenhouse/Lever/Ashby/
+Workday), posting-liveness and scam/ghost-job screening, and LaTeX CV export.
+On top of the merge: credentials and OAuth tokens are now encrypted at rest,
+the terminal host was rewritten in Bun (dropping a .NET dependency), and CI
+was added.
+
 ## Components
 
 - **Web app** ([src/web/](src/web/)) - `http://localhost:8000`. Owns
