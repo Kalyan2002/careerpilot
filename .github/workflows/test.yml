@@ -22,7 +22,11 @@ jobs:
         run: bun --cwd=src/web run db:generate
 
       - name: Typecheck web
+        # tsc OOMs on GitHub's standard 7GB runner against Prisma's generated
+        # types at the default V8 heap limit; raise it explicitly.
         run: bun --cwd=src/web run typecheck
+        env:
+          NODE_OPTIONS: --max-old-space-size=6144
 
       - name: Typecheck terminal host
         run: bun --cwd=src/terminal-node run typecheck
